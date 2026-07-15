@@ -4,7 +4,7 @@ Two independent, data-driven energy market projects — one a live analytical da
 
 ## Projects
 
-### [CrudeEdge](./crudeEdge)
+### [Crude oil & Natrual Gas Dashboard](./Crude oil & Natural Gas Dashboard)
 A dark-theme, terminal-style analytical dashboard and paper-trading journal for WTI Crude Oil and Henry Hub Natural Gas. Covers market overview, spread/signal analysis (oil-to-gas ratio, crack-spread proxy), fundamentals (production, storage, refinery utilization), a weekly market thesis journal, and a risk-controlled paper trade tracker with real P&L math.
 
 **Stack:** JavaScript (React 18, Vite), Tailwind CSS, Recharts, TanStack Query, Vitest — see [full README](./crudeEdge/README.md) for architecture, methodology, and setup.
