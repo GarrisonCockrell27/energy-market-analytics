@@ -24,14 +24,7 @@ because two price series weren't date-aligned, a futures curve quietly two years
 live spot price, a real (not fake) natural gas price spike that looked like a data error until traced against
 the raw EIA response. Fixing those for real, rather than hiding them, is most of what this project actually is.
 
-## 3. Screenshots
-
-Not included as static images in this repo — the fastest way to see it is to run it locally (see Setup below)
-and open all four tabs; every panel is self-labeling (source, series ID, unit, observation date), so it reads
-clearly without narration. If you're viewing this on GitHub and want a quick look before cloning, ask the
-author for a live demo link.
-
-## 4. Core features
+## 3. Core features
 
 - **Market Overview** — WTI and Henry Hub spot price panels (1D/1W/1M change, 52-week range, range-selectable
   chart), the date-aligned oil-to-gas ratio with a z-score/percentile signal, weekly crude inventory (with
@@ -53,7 +46,7 @@ author for a live demo link.
   UNAVAILABLE — never silently blurred together — grouped into core/historical/optional tiers with a one-line
   summary.
 
-## 5. Technology stack
+## 4. Technology stack
 
 - **React 18 + Vite 5** — client app
 - **Tailwind CSS** — dark zinc/slate terminal theme (green = bullish, red = bearish, amber = neutral)
@@ -62,7 +55,7 @@ author for a live demo link.
 - **Vercel serverless functions** (`/api`) — proxy all third-party API calls so keys never reach the browser
 - **Vitest** — unit tests for all quantitative logic
 
-## 6. Architecture summary
+## 5. Architecture summary
 
 Data flows in one direction: **API proxy → fetch hook → derived-data hook (alignment/math) → component
 (presentation only)**.
@@ -85,7 +78,7 @@ Data flows in one direction: **API proxy → fetch hook → derived-data hook (a
 - `src/components/*.jsx` — presentation only. No calculation logic lives in a component; if you're editing a
   number's *math*, you're in `calculations.js`, not a `.jsx` file.
 
-## 7. Data sources
+## 6. Data sources
 
 | Source | Required? | Used for |
 |---|---|---|
@@ -95,7 +88,7 @@ Data flows in one direction: **API proxy → fetch hook → derived-data hook (a
 
 All three are free with no credit card required. See §16 for how to get keys.
 
-## 8. Instrument definitions
+## 7. Instrument definitions
 
 Every series has one canonical definition in `src/utils/instruments.js`, e.g.:
 
@@ -116,7 +109,7 @@ Paper-trade instruments have a parallel `TRADE_INSTRUMENTS` registry with contra
 (flat $ notional per point — they're multi-leg observations tracked as one synthetic number, not listed
 contracts).
 
-## 9. Spot vs. futures — why this distinction is enforced everywhere
+## 8. Spot vs. futures — why this distinction is enforced everywhere
 
 Every price panel is labeled with its `seriesType` (spot, continuous-future, index, yield). This matters
 because this app's own history has a concrete example of what happens when you don't: an earlier build showed
@@ -126,7 +119,7 @@ no indication either way. The fix wasn't a smarter number; it was refusing to pr
 anything other than **HISTORICAL**, with an explicit "not comparable to today's spot price" note. See
 `src/utils/instruments.js` (`discontinuedAfter` field) and the Spread & Signals tab.
 
-## 10. Oil-to-gas ratio methodology
+## 9. Oil-to-gas ratio methodology
 
 **Formula:** `WTI Cushing Spot ($/bbl) ÷ Henry Hub Spot ($/MMBtu)`, using EIA series `PET.RWTC.D` and
 `NG.RNGWHHD.D`.
@@ -143,7 +136,7 @@ dashboard then reports:
 - A probabilistic label (NEUTRAL / ELEVATED / DEPRESSED / STATISTICALLY UNUSUAL), never a directive like "buy"
   or "sell"
 
-## 11. Crack-spread methodology
+## 10. Crack-spread methodology
 
 Labeled **"Indicative Spot 3:2:1 Crack Proxy"** — deliberately not called a tradeable crack spread. Formula:
 
@@ -157,7 +150,7 @@ before netting, for the same reason as the ratio above. It explicitly **excludes
 actual refinery yields (real refineries don't produce a fixed 2:1 gasoline:distillate ratio), transportation,
 quality/location basis, financing, and execution/hedging costs — it's a directional proxy, not a P&L estimate.
 
-## 12. Fundamental-data methodology
+## 11. Fundamental-data methodology
 
 Seasonal comparisons (crude inventory, Henry Hub storage) bucket each weekly observation into a week-of-year
 index (1-52; the rare 53rd week folds into bucket 52 rather than creating an almost-always-empty bucket),
@@ -166,7 +159,7 @@ mean/range band. Week-of-year bucketing uses UTC date components throughout — 
 UTC-based day-of-year math with local-timezone year extraction, which silently shifted dates near January 1st
 into the wrong year/bucket in timezones behind UTC. Caught by a unit test, fixed in `seasonalAverageByWeek`.
 
-## 13. Paper-trade P&L methodology
+## 12. Paper-trade P&L methodology
 
 `P&L = (mark − entry) × direction × size × contract multiplier`, where `direction` is +1 for Long / −1 for
 Short and the multiplier comes from the single `TRADE_INSTRUMENTS` registry (never hardcoded per trade). A
@@ -177,7 +170,7 @@ reward, and the R:R ratio from entry/stop/target before the trade is even logged
 placed on the wrong side of entry. Closed-trade stats (win rate, avg winner/loser, profit factor, expectancy)
 are computed from realized P&L only; open positions are marked at the same live series every other tab uses.
 
-## 14. Data-quality controls
+## 13. Data-quality controls
 
 Every fetched series passes through `checkSeries`/`describeQueryHealth` (`src/utils/dataQuality.js`), which
 assigns exactly one of six states:
@@ -196,7 +189,7 @@ assigns exactly one of six states:
 price spike (Jan 2026: $4.11 → $6.88 in one day) that's now flagged with a ⚠ and explanation rather than either
 hidden or left looking like an unexplained data error.
 
-## 15. Setup instructions
+## 14. Setup instructions
 
 ```bash
 git clone <this-repo>
@@ -209,7 +202,7 @@ npm run dev
 Open http://localhost:5173. The Vite dev server includes a built-in plugin (`vite.config.js`) that runs the
 same `/api/*` handlers Vercel uses in production, so local dev and a real deploy behave identically.
 
-## 16. Environment variables
+## 15. Environment variables
 
 | Variable | Required | Get it at |
 |---|---|---|
@@ -220,7 +213,7 @@ same `/api/*` handlers Vercel uses in production, so local dev and a real deploy
 All free, no credit card. Copy `.env.example` to `.env.local` and fill these in — `.env.local` is gitignored
 and read **server-side only** (see `api/*.js`), never bundled into client JavaScript.
 
-## 17. Testing commands
+## 16. Testing commands
 
 ```bash
 npm run test        # run the vitest suite once
@@ -236,13 +229,13 @@ including edge cases (no overlapping dates, zero standard deviation, duplicate/n
 observation, a missing latest value, out-of-range values). No TypeScript is configured in this project, so
 there is no separate type-check step.
 
-## 18. Deployment instructions
+## 17. Deployment instructions
 
 Push to GitHub, import into Vercel, and add the environment variables from §16 in the Vercel project settings.
 `vercel.json` and the `api/` functions handle the rest — `npm run build` must succeed with no committed
 credentials, which is verified before every commit in this repo's history.
 
-## 19. Known limitations
+## 18. Known limitations
 
 - **No live futures curve.** EIA discontinued its free futures dataset in April 2024; no other free,
   no-credential provider was integrated. Adding one (e.g. a paid CME/ICE feed) would require documenting the
@@ -255,7 +248,7 @@ credentials, which is verified before every commit in this repo's history.
   calculation.
 - **No automated screenshots** are checked into this repo (see §3).
 
-## 20. Disclaimer
+## 19. Disclaimer
 
 CrudeEdge is an educational and analytical project. It is **not investment advice**. Public data sources may be
 delayed, revised, or discontinued without notice (see §9 for a real example). The Paper Trade Journal is a
