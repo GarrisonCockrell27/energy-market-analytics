@@ -1,4 +1,4 @@
-# CrudeEdge
+# Crude oil & Natural Gas Dashboard
 
 A dark-theme, terminal-style analytical dashboard and paper-trading journal for **WTI Crude Oil** (primary)
 and **Henry Hub Natural Gas** (secondary), backed entirely by free, no-credit-card-required data APIs (EIA,
