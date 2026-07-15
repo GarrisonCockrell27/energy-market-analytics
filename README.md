@@ -4,10 +4,11 @@ Two independent, data-driven energy market projects — one a live analytical da
 
 ## Projects
 
-### [Crude Oil & Natural Gas Dashboard](./Crude%20Oil%20%26%20Natural%20Gas%20Dashboard
+### [Crude Oil & Natural Gas Dashboard](./Crude%20Oil%20%26%20Natural%20Gas%20Dashboard)
+
 A dark-theme, terminal-style analytical dashboard and paper-trading journal for WTI Crude Oil and Henry Hub Natural Gas. Covers market overview, spread/signal analysis (oil-to-gas ratio, crack-spread proxy), fundamentals (production, storage, refinery utilization), a weekly market thesis journal, and a risk-controlled paper trade tracker with real P&L math.
 
-**Stack:** JavaScript (React 18, Vite), Tailwind CSS, Recharts, TanStack Query, Vitest — see [full README](./crudeEdge/README.md) for architecture, methodology, and setup.
+**Stack:** JavaScript (React 18, Vite), Tailwind CSS, Recharts, TanStack Query, Vitest — see [full README](./Crude%20Oil%20%26%20Natural%20Gas%20Dashboard/README.md) for architecture, methodology, and setup.
 
 ### [Permian Crude Hedge & Basis Risk Model](./Permian_Crude_Hedge_Model)
 An educational Excel model examining how a hypothetical Permian Basin crude producer is exposed to WTI benchmark-price risk, Midland-Cushing basis risk, and production-volume risk — and how a WTI fixed-price swap and a combined basis hedge change that exposure.
